@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
-import com.thomasharte.todo.MainActivity;
 import com.thomasharte.todo.R;
 
 public class EditItemActivity extends ActionBarActivity {

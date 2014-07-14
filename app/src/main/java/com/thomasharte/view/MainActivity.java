@@ -1,4 +1,4 @@
-package com.thomasharte.todo;
+package com.thomasharte.view;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.thomasharte.model.TodoList;
-import com.thomasharte.view.EditItemActivity;
+import com.thomasharte.todo.R;
 
 
 public class MainActivity extends ActionBarActivity {
