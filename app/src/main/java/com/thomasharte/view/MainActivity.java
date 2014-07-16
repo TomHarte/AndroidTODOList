@@ -11,13 +11,14 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.thomasharte.com.thomasharte.adaptor.TodoItemListAdaptor;
 import com.thomasharte.model.TodoList;
 import com.thomasharte.todo.R;
 
 
 public class MainActivity extends ActionBarActivity {
 
-    ArrayAdapter<String> itemsAdaptor;
+    TodoItemListAdaptor itemsAdaptor;
     ListView lvItems;
     TodoList todoList;  // see notes below about factored out model; probably it wasn't
                         // the ideal thing to do
@@ -40,7 +41,7 @@ public class MainActivity extends ActionBarActivity {
 
         // get the list view, create a suitable adaptor and gift it
         lvItems = (ListView)findViewById(R.id.lvItems);
-        itemsAdaptor = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, todoList.getItems());
+        itemsAdaptor = new TodoItemListAdaptor(this, todoList);
         lvItems.setAdapter(itemsAdaptor);
 
         // set up our two listening actions
@@ -73,7 +74,7 @@ public class MainActivity extends ActionBarActivity {
                             // I've used the position as the request code; all the documentation
                             // says is "If >= 0, this code will be returned in onActivityResult()
                             // when the activity exits." so I'm not sure this is abuse but it's
-                            // probably debateable
+                            // probably debatable
                     }
                 };
         lvItems.setOnItemClickListener(clickListener);

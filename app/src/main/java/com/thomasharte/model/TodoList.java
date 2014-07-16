@@ -85,14 +85,6 @@ public class TodoList extends SQLiteOpenHelper {
         }
     }
 
-    // this is where the data encapsulation falls off a cliff; despite
-    // asking that external actors use our add, remove and set, the
-    // direct array is exposed. That's because I'm inexperienced at
-    // dealing with adaptors and was unsure what else to do
-    public ArrayList<String> getItems() {
-        return items;
-    }
-
     // the following are what would be used in totality were proper
     // data encapsulation being applied; they vend, add and update
     // items, ensuring a write to disk when necessary
@@ -113,5 +105,9 @@ public class TodoList extends SQLiteOpenHelper {
     public void setItem(int index, String item){
         items.set(index, item);
         saveItems();
+    }
+
+    public int getCount() {
+        return items.size();
     }
 }
