@@ -11,6 +11,10 @@ import com.thomasharte.model.TodoItem;
 import com.thomasharte.model.TodoList;
 import com.thomasharte.todo.R;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by thomasharte on 16/07/2014.
  */
@@ -30,7 +34,7 @@ public class TodoItemListAdaptor extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
-        String item = todoList.getItem(position);
+        TodoItem item = todoList.getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
@@ -41,7 +45,16 @@ public class TodoItemListAdaptor extends BaseAdapter {
         TextView date = (TextView) convertView.findViewById(R.id.date);
 
         // Populate the data into the template view using the data object
-        description.setText(item);
+        description.setText(item.getDescription());
+
+        try{
+            DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            date.setText(sdf.format(item.getDate()));
+        }
+        catch(Exception ex){
+            date.setText("");
+        }
+
         // Return the completed view to render on screen
         return convertView;
     }

@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -21,7 +22,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class TodoList extends SQLiteOpenHelper {
 
-    private ArrayList<String> items;
+    private ArrayList<TodoItem> items;
     private static TodoList instance = null;
 
     private static final String TABLE_NAME = "todoItems";
@@ -61,14 +62,14 @@ public class TodoList extends SQLiteOpenHelper {
     // instance variable applicationContext; getFilesDir isn't directly
     // available because this class does not inherit from Context
     private void readItems() {
-        items = new ArrayList<String>();
+        items = new ArrayList<TodoItem>();
 
         String[] columns = {DESCRIPTION_COLUMN, DATE_COLUMN};
         Cursor cursor = getReadableDatabase().query(TABLE_NAME, columns, null, null, null, null, null);
 
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
-            items.add(cursor.getString(0));
+            items.add(new TodoItem(cursor.getString(0), new Date(cursor.getLong(1))));
             cursor.moveToNext();
         }
     }
@@ -78,9 +79,10 @@ public class TodoList extends SQLiteOpenHelper {
         getWritableDatabase().delete(TABLE_NAME, null, null);
 
         ContentValues values = new ContentValues();
-        for(String string : items)
+        for(TodoItem item: items)
         {
-            values.put(DESCRIPTION_COLUMN, string);
+            values.put(DESCRIPTION_COLUMN, item.getDescription());
+            values.put(DATE_COLUMN, item.getDate().getTime());
             getWritableDatabase().insert(TABLE_NAME, null, values);
         }
     }
@@ -88,11 +90,11 @@ public class TodoList extends SQLiteOpenHelper {
     // the following are what would be used in totality were proper
     // data encapsulation being applied; they vend, add and update
     // items, ensuring a write to disk when necessary
-    public String getItem(int index) {
+    public TodoItem getItem(int index) {
         return items.get(index);
     }
 
-    public void addItem(String item) {
+    public void addItem(TodoItem item) {
         items.add(item);
         saveItems();
     }
@@ -102,7 +104,7 @@ public class TodoList extends SQLiteOpenHelper {
         saveItems();
     }
 
-    public void setItem(int index, String item){
+    public void setItem(int index, TodoItem item){
         items.set(index, item);
         saveItems();
     }

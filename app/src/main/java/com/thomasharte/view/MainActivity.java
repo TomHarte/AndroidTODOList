@@ -12,8 +12,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.thomasharte.com.thomasharte.adaptor.TodoItemListAdaptor;
+import com.thomasharte.model.TodoItem;
 import com.thomasharte.model.TodoList;
 import com.thomasharte.todo.R;
+
+import java.util.Date;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -84,7 +87,7 @@ public class MainActivity extends ActionBarActivity {
         // pretty much directly from the tutorial, but for my factoring out
         // of the model
         EditText etNewItem = (EditText)findViewById(R.id.etNewItem);
-        todoList.addItem(etNewItem.getText().toString());
+        todoList.addItem(new TodoItem(etNewItem.getText().toString(), new Date()));
         itemsAdaptor.notifyDataSetChanged();
         etNewItem.setText("");
     }
@@ -94,11 +97,11 @@ public class MainActivity extends ActionBarActivity {
         // remember I used request code as a direct array index? So
         // this is as easy as pulling the new string out and sending it
         // off to the model
-        if (resultCode == RESULT_OK) {
-            String name = data.getExtras().getString(EditItemActivity.ITEM_CONTENT_KEY);
-            todoList.setItem(requestCode, name);
-            itemsAdaptor.notifyDataSetChanged();
-        }
+//        if (resultCode == RESULT_OK) {
+//            String name = data.getExtras().getString(EditItemActivity.ITEM_CONTENT_KEY);
+//            todoList.setItem(requestCode, name);
+//            itemsAdaptor.notifyDataSetChanged();
+//        }
     }
 
     // template stuff follows...
