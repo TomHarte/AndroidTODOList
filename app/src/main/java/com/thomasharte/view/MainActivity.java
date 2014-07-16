@@ -97,11 +97,11 @@ public class MainActivity extends ActionBarActivity {
         // remember I used request code as a direct array index? So
         // this is as easy as pulling the new string out and sending it
         // off to the model
-//        if (resultCode == RESULT_OK) {
-//            String name = data.getExtras().getString(EditItemActivity.ITEM_CONTENT_KEY);
-//            todoList.setItem(requestCode, name);
-//            itemsAdaptor.notifyDataSetChanged();
-//        }
+        if (resultCode == RESULT_OK) {
+            TodoItem item = (TodoItem)data.getExtras().getSerializable(EditItemActivity.ITEM_CONTENT_KEY);
+            todoList.setItem(requestCode, item);
+            itemsAdaptor.notifyDataSetChanged();
+        }
     }
 
     // template stuff follows...
