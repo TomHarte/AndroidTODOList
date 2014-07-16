@@ -3,7 +3,7 @@ Android TODO List
 
 This is an application for maintaining a TODO list. It was extended from the project supplied to us more or less in copy and paste form during the two-hour CodePath session.
 
-Time spent: 2 hours plus two-hour session
+Time spent: 4 hours plus two-hour session
 
 # Completed user stories
 
@@ -14,9 +14,9 @@ Time spent: 2 hours plus two-hour session
 
 # Notes
 
-There are two very simple activities, one of which largely came from the CodePath tutorial and the second was self-written in order hopefully to evidence my suitability for the eight-week Android course.
+There are two simple activities, one adaptor and a couple of model files. The CodePath TODO tutorial strongly influenced the main activity, with the Rotten Tomatoes tutorial being a source of inspiration for the adaptor. The two model classes — a TODO item and a TODO list — were, like the edit activity, self-written hopefully to evidence my suitability for the eight-week Android course.
 
-I factored out the list itself to a model object as I was unaware until later that activities can return results and falsely assumed each would need to communicate with the model. However my model it doesn't encapsulate its data particularly well owing to my inexperience with adaptors.
+I factored out the list itself to a model object; it inherits directly from `SQLiteOpenHelper` which may not be ideal — it enshrines the idea there'll be only one of them. It's a singleton so that assumption has flowed deeper into the project. A custom adaptor acts both to surrender all list maintenance to the TODOList object and to substitute my custom cell layout.
 
 # Add task walkthrough
 ![Add task Walkthrough](images/AddTask.gif)
