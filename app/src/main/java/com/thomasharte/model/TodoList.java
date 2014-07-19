@@ -1,9 +1,5 @@
 package com.thomasharte.model;
 
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -14,40 +10,52 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /*
-    As per the comments in MainActivity; I factored out the model assuming it
-    would have an independent relationship with my two activities. Then I found
-    out that activities can have return results and therefore that this was
-    completely unnecessary. But it was done by then. This is why some more formal
-    lessons would be to my benefit...
+    This has been factored out as it's a model thing; it also
+    proved to be the easiest way to combine array-style usage
+    with an updating SQL store. At this point I'm unclear
+    on the normal Android idioms for how a SQLiteOpenHelper ties
+    into things so possibly I've created a design
  */
 public class TodoList extends SQLiteOpenHelper {
 
+    // the item list is kept in memory as an array rather than
+    // being live-fetched from SQL
     private ArrayList<TodoItem> items;
+
+    // this is for the singleton instance
     private static TodoList instance = null;
 
+    // table and column names; fairly uncontroversial
     private static final String TABLE_NAME = "todoItems";
     private static final String DESCRIPTION_COLUMN = "description";
     private static final String DATE_COLUMN = "date";
+    private static final String ID_COLUMN = "ROWID";    // this is the one SQLite provides for us
 
-    // I assumed I'd be creating a singleton to provide a central
-    // store for my two activities, hence my stab at getInstance...
+    private static final int databaseVersion = 3;
+
+    // I've designed this as a singleton, should the store
+    // be needed by several activities, hence this stab at getInstance...
     public static TodoList getInstance(Context context) {
         if(instance != null) return instance;
         return instance = new TodoList(context);
     }
 
-    // a hopefully vanilla constructor; it stores the context given
-    // (as we'll need it to perform getFilesDir) and does the initial
-    // restore of items from disk
+    // a fairly vanilla constructor; it calls the appropriate super
+    // constructor and does the initial restore of items
     public TodoList(Context applicationContext) {
-        super(applicationContext, "todoList", null, 1);
+        super(applicationContext, "todoList", null, databaseVersion);
         readItems();
     }
 
     // one table, that's all we've got, with columns for description and date
+    // (plus the implicit ROWID column, that SQLite gives us for free)
     @Override
     public void onCreate(SQLiteDatabase database) {
-        database.execSQL("create table " + TABLE_NAME  + " (" + DESCRIPTION_COLUMN  + " text, " + DATE_COLUMN + " integer);");
+        database.execSQL(
+                   "create table " + TABLE_NAME  + " (" +
+                   DESCRIPTION_COLUMN  + " text, " +
+                   DATE_COLUMN + " integer" +
+                   ");");
     }
 
     // we'll just drop the table and then create it afresh — no attempt is
@@ -58,58 +66,73 @@ public class TodoList extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // these are directly form the tutorial but for the use of the
-    // instance variable applicationContext; getFilesDir isn't directly
-    // available because this class does not inherit from Context
+    // readItems restores every item in the SQL store into memory. This is because
+    // I'm unclear on the cost/performance effects and am gambling on a small
+    // list of TODO items
     private void readItems() {
         items = new ArrayList<TodoItem>();
 
-        String[] columns = {DESCRIPTION_COLUMN, DATE_COLUMN};
-        Cursor cursor = getReadableDatabase().query(TABLE_NAME, columns, null, null, null, null, null);
+        // simple enough: order by the [autoincrementing] ID column,
+        // populate our TODO items with the ID, description and date
+        String[] columns = {ID_COLUMN, DESCRIPTION_COLUMN, DATE_COLUMN};
+        Cursor cursor = getReadableDatabase().query(TABLE_NAME, columns, null, null, null, null, ID_COLUMN, null);
 
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
-            items.add(new TodoItem(cursor.getString(0), new Date(cursor.getLong(1))));
+            items.add(new TodoItem(cursor.getInt(0), cursor.getString(1), new Date(cursor.getLong(2))));
             cursor.moveToNext();
         }
     }
 
-    private void saveItems() {
-        // yuck: delete everything and start again
-        getWritableDatabase().delete(TABLE_NAME, null, null);
-
+    // the next two are a couple of helpers for mapping TodoItems to
+    // SQL values
+    private ContentValues contentValuesForItem(TodoItem item) {
         ContentValues values = new ContentValues();
-        for(TodoItem item: items)
-        {
-            values.put(DESCRIPTION_COLUMN, item.getDescription());
-            values.put(DATE_COLUMN, item.getDate().getTime());
-            getWritableDatabase().insert(TABLE_NAME, null, values);
-        }
+        values.put(DESCRIPTION_COLUMN, item.getDescription());
+        values.put(DATE_COLUMN, item.getDate().getTime());
+        return values;
     }
 
-    // the following are what would be used in totality were proper
-    // data encapsulation being applied; they vend, add and update
-    // items, ensuring a write to disk when necessary
+    private String whereClauseForItem(TodoItem item) {
+        return ID_COLUMN + " = " + item.getRowID();
+    }
+
+    // the following act a lot like a standard Array, but
+    // parrot material to the SQL store upon any update
+    // of the array
     public TodoItem getItem(int index) {
         return items.get(index);
     }
 
+    public int getCount() {
+        return items.size();
+    }
+
     public void addItem(TodoItem item) {
-        items.add(item);
-        saveItems();
+        // add the thing, then create the recorded TodoItem according to
+        // the row ID we obtain with the insert
+        long rowID = getWritableDatabase().insert(TABLE_NAME, null, contentValuesForItem(item));
+        items.add(new TodoItem(rowID, item.getDescription(), item.getDate()));
     }
 
     public void removeItem(int index) {
+        // query: should the interface here be changed to expect a TodoItem
+        // rather than the index of one?
+        TodoItem item = items.get(index);
+        getWritableDatabase().delete(TABLE_NAME, whereClauseForItem(item), null);
         items.remove(index);
-        saveItems();
     }
 
-    public void setItem(int index, TodoItem item){
-        items.set(index, item);
-        saveItems();
-    }
+    public void setItem(int index, TodoItem item) {
+        // create a patched item consisting of the correct row ID, which
+        // we'll crib from the existing item, and the (possibly) new
+        // description and date. Then update the row and put the patched
+        // item into the array (as the row ID will be assumed to be correct
+        // in the future)
+        TodoItem existingItem = items.get(index);
+        TodoItem modifiedItem = new TodoItem(existingItem.getRowID(), item.getDescription(), item.getDate());
 
-    public int getCount() {
-        return items.size();
+        getWritableDatabase().update(TABLE_NAME, contentValuesForItem(modifiedItem), whereClauseForItem(modifiedItem), null);
+        items.set(index, modifiedItem);
     }
 }
