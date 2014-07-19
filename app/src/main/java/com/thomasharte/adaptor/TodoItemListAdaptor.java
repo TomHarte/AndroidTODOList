@@ -1,4 +1,4 @@
-package com.thomasharte.com.thomasharte.adaptor;
+package com.thomasharte.adaptor;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,7 +13,6 @@ import com.thomasharte.todo.R;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by thomasharte on 16/07/2014.

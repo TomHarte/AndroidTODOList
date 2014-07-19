@@ -7,11 +7,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.thomasharte.com.thomasharte.adaptor.TodoItemListAdaptor;
+import com.thomasharte.adaptor.TodoItemListAdaptor;
 import com.thomasharte.model.TodoItem;
 import com.thomasharte.model.TodoList;
 import com.thomasharte.todo.R;
