@@ -31,7 +31,7 @@ public class TodoList extends SQLiteOpenHelper {
     private static final String DATE_COLUMN = "date";
     private static final String ID_COLUMN = "ROWID";    // this is the one SQLite provides for us
 
-    private static final int databaseVersion = 3;
+    private static final int databaseVersion = 4;
 
     // I've designed this as a singleton, should the store
     // be needed by several activities, hence this stab at getInstance...
@@ -53,6 +53,9 @@ public class TodoList extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(
                    "create table " + TABLE_NAME  + " (" +
+                   ID_COLUMN + " integer primary key autoincrement, " + // we'll assume elsewhere that ROWID is autoincrement, e.g.
+                                                                        // by assuming that sorting by ROWID will return insert order,
+                                                                        // so let's stipulate that it is
                    DESCRIPTION_COLUMN  + " text, " +
                    DATE_COLUMN + " integer" +
                    ");");
