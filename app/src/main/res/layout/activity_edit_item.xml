@@ -41,7 +41,11 @@
 				android:layout_height="wrap_content"
 				android:id="@+id/dpDate"
 				android:layout_below="@+id/etItem"
-				android:layout_centerHorizontal="true" />
+				android:layout_centerHorizontal="true"
+				android:focusable="true"
+				android:focusableInTouchMode="true">
+				<requestFocus />
+			</DatePicker>
 
 			<TimePicker
 				android:layout_width="wrap_content"
