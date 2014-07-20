@@ -13,6 +13,7 @@ import com.thomasharte.todo.R;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by thomasharte on 16/07/2014.
@@ -40,12 +41,13 @@ public class TodoItemListAdaptor extends BaseAdapter {
             convertView = inflater.inflate(R.layout.item_todo_item, parent, false);
         }
         // Lookup views within item layout
-        TextView description = (TextView) convertView.findViewById(R.id.description);
-        TextView date = (TextView) convertView.findViewById(R.id.date);
+        TextView descriptionView = (TextView) convertView.findViewById(R.id.description);
+        TextView dateView = (TextView) convertView.findViewById(R.id.date);
 
         // Populate the data into the template view using the data object
-        description.setText(item.getDescription());
-        date.setText(DateFormat.getDateInstance(DateFormat.LONG).format(item.getDate()));
+        descriptionView.setText(item.getDescription());
+        Date date = item.getDate();
+        dateView.setText(DateFormat.getDateInstance().format(date) + ", " + DateFormat.getTimeInstance(DateFormat.SHORT).format(date));
 
         // Return the completed view to render on screen
         return convertView;
