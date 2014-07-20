@@ -17,7 +17,7 @@ Time spent: 6 hours plus two-hour session
 * [x] Required: add a task
 * [x] Required: remove a task
 * [x] Required: edit a task
-* [x] Additional: persistence of list between launched
+* [x] Additional: persistence of list between launches
 * [x] Additional: added dates and times for tasks
 * [x] Additional: added a 'done' checkbox for tasks
 
