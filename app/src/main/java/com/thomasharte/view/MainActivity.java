@@ -88,7 +88,7 @@ public class MainActivity extends ActionBarActivity {
         // pretty much directly from the tutorial, but for my factoring out
         // of the model
         EditText etNewItem = (EditText)findViewById(R.id.etNewItem);
-        todoList.addItem(new TodoItem(etNewItem.getText().toString(), new Date()));
+        todoList.addItem(new TodoItem(etNewItem.getText().toString(), new Date(), false));
         itemsAdaptor.notifyDataSetChanged();
         etNewItem.setText("");
 

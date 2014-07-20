@@ -3,9 +3,11 @@ package com.thomasharte.view;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
@@ -57,6 +59,10 @@ public class EditItemActivity extends ActionBarActivity {
         TimePicker tpPicker = (TimePicker)findViewById(R.id.tpTime);
         tpPicker.setCurrentHour(hour);
         tpPicker.setCurrentMinute(minute);
+
+		// push the done tick mark
+		CheckBox checkBox = (CheckBox)findViewById(R.id.checkBox);
+		checkBox.setChecked(item.getIsDone());
     }
 
     // we'll treat the back button as another opportunity to save
@@ -107,13 +113,17 @@ public class EditItemActivity extends ActionBarActivity {
         calendar.set(year, month, day, hour, minute);
         Date date = calendar.getTime();
 
-        // we can report that this activity ended ok, with the generated
+		// determine whether this item is now 'done'
+		CheckBox checkBox = (CheckBox)findViewById(R.id.checkBox);
+		Boolean isDone = checkBox.isChecked();
+
+		// we can report that this activity ended ok, with the generated
         // content being the latest string. Idiomatically I decided it was
         // probably unclean to reuse MainActivity's ITEM_CONTENT_KEY as
         // that assumes I know who triggered me, or else requires anybody
         // that isn't MainActivity to know not just me but also MainActivity
         Intent data = new Intent();
-        data.putExtra(EditItemActivity.ITEM_CONTENT_KEY, new TodoItem(description, date));
+        data.putExtra(EditItemActivity.ITEM_CONTENT_KEY, new TodoItem(description, date, isDone));
         setResult(RESULT_OK, data);
         finish();
     }

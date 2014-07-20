@@ -13,24 +13,23 @@ public class TodoItem implements Serializable {
     private String description;
     private long rowID;
 
+	private Boolean isDone;
+
     // the full constructor stores the row ID; so this creates
     // the sort of items we expect to hang around
-    public TodoItem(long rowID, String description, Date date) {
+    public TodoItem(long rowID, String description, Date date, Boolean isDone) {
         super();
 
         this.description = description;
         this.date = date;
         this.rowID = rowID;
+		this.isDone = isDone;
     }
 
     // a short-form constructor sets a default row ID of -1;
     // so it is for the creation of transient items
-    public TodoItem(String description, Date date) {
-        super();
-
-        this.description = description;
-        this.date = date;
-        this.rowID = -1;
+    public TodoItem(String description, Date date, Boolean isDone) {
+        this(-1, description, date, isDone);
     }
 
     // rote getters; no setters are provided: this class is immutable
@@ -43,4 +42,7 @@ public class TodoItem implements Serializable {
     public long getRowID()  {
         return rowID;
     }
+	public Boolean getIsDone() {
+		return isDone;
+	}
 }

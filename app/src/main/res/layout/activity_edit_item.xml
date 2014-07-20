@@ -36,16 +36,14 @@
 				android:layout_alignRight="@+id/dpDate"
 				android:layout_alignEnd="@+id/dpDate" />
 
-			<DatePicker
+			<CheckBox
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:id="@+id/dpDate"
-				android:layout_below="@+id/etItem"
-				android:layout_centerHorizontal="true"
-				android:focusable="true"
-				android:focusableInTouchMode="true">
-				<requestFocus />
-			</DatePicker>
+				android:text="Task has been completed"
+				android:id="@+id/checkBox"
+				android:layout_below="@+id/btnSave"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentStart="true"/>
 
 			<TimePicker
 				android:layout_width="wrap_content"
@@ -53,6 +51,18 @@
 				android:id="@+id/tpTime"
 				android:layout_below="@+id/dpDate"
 				android:layout_centerHorizontal="true" />
+
+			<DatePicker
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+id/dpDate"
+				android:focusable="true"
+				android:focusableInTouchMode="true"
+				android:layout_below="@+id/checkBox"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentStart="true">
+				<requestFocus />
+			</DatePicker>
 
 		</RelativeLayout>
 	</ScrollView>
