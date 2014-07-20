@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TimePicker;
 
 import com.thomasharte.model.TodoItem;
 import com.thomasharte.todo.R;
@@ -36,9 +37,8 @@ public class EditItemActivity extends ActionBarActivity {
         EditText etItem = (EditText)findViewById(R.id.etItem);
         etItem.setText(item.getDescription());
 
-        // also populate the date picker, using the user's Calendar to separate
-        // the date into day/month/year
-        DatePicker dpPicker = (DatePicker)findViewById(R.id.dpDate);
+        // use the user's selected calendar to break the item's date
+        // into year, month, day, hour and minute
         Date date = item.getDate();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -46,7 +46,17 @@ public class EditItemActivity extends ActionBarActivity {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int hour = calendar.get(Calendar.HOUR);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        // push the year, month, day to the date picker
+        DatePicker dpPicker = (DatePicker)findViewById(R.id.dpDate);
         dpPicker.updateDate(year, month, day);
+
+        // push the minute, hour to the time picker
+        TimePicker tpPicker = (TimePicker)findViewById(R.id.tpTime);
+        tpPicker.setCurrentHour(hour);
+        tpPicker.setCurrentMinute(minute);
     }
 
 
@@ -55,9 +65,10 @@ public class EditItemActivity extends ActionBarActivity {
         EditText etItem = (EditText)findViewById(R.id.etItem);
         String description = etItem.getText().toString();
 
-        // ... also get a date
+        // get year, month, day from the date picker
         DatePicker dpPicker = (DatePicker)findViewById(R.id.dpDate);
-        Calendar calendar = Calendar.getInstance();
+        int day = dpPicker.getDayOfMonth();
+        int year = dpPicker.getYear();
         int month = Calendar.JANUARY;
         // there's the whiff of extreme desperation here for a reason:
         // DatePicker returns an int, Calendar wants an int but I can't
@@ -79,7 +90,15 @@ public class EditItemActivity extends ActionBarActivity {
             case 10: month = Calendar.NOVEMBER; break;
             case 11: month = Calendar.DECEMBER; break;
         }
-        calendar.set(dpPicker.getYear(), month, dpPicker.getDayOfMonth());
+
+        // get hour and minute from the time picker
+        TimePicker tpPicker = (TimePicker)findViewById(R.id.tpTime);
+        int hour = tpPicker.getCurrentHour();
+        int minute = tpPicker.getCurrentMinute();
+
+        // use the user's calendar to map to a date
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day, hour, minute);
         Date date = calendar.getTime();
 
         // we can report that this activity ended ok, with the generated
