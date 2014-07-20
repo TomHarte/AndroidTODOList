@@ -59,6 +59,12 @@ public class EditItemActivity extends ActionBarActivity {
         tpPicker.setCurrentMinute(minute);
     }
 
+    // we'll treat the back button as another opportunity to save
+    // the item (in effect there's no 'cancel' option in this app)
+    @Override
+    public void onBackPressed() {
+        saveTodoItem(null);
+    }
 
     public void saveTodoItem(View v) {
         // grab the description
