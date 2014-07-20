@@ -45,14 +45,7 @@ public class TodoItemListAdaptor extends BaseAdapter {
 
         // Populate the data into the template view using the data object
         description.setText(item.getDescription());
-
-        try{
-            DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-            date.setText(sdf.format(item.getDate()));
-        }
-        catch(Exception ex){
-            date.setText("");
-        }
+        date.setText(DateFormat.getDateInstance(DateFormat.LONG).format(item.getDate()));
 
         // Return the completed view to render on screen
         return convertView;
