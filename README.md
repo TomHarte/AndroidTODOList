@@ -7,16 +7,19 @@ This is an application for maintaining a TODO list. It has been heavily extended
 * factored out TODO items and the item list into separate model classes;
 * added a Date to TODO items;
 * created a custom layout for list view cells, which displays both the TODO's title and the relevant date, appropriately localised as per the user's selected calendar and time zone;
-* added editing of the date (both day/month/year and hour/minute).
+* added editing of the date (both day/month/year and hour/minute);
+* added a checkbox to indicate whether a task has been completed, which can be toggled from the edit screen or from the list view.
 
-Time spent: 4 hours plus two-hour session
+Time spent: 6 hours plus two-hour session
 
 # Completed user stories
 
 * [x] Required: add a task
 * [x] Required: remove a task
 * [x] Required: edit a task
-* [x] Required: persistence of list between launched
+* [x] Additional: persistence of list between launched
+* [x] Additional: added dates and times for tasks
+* [x] Additional: added a 'done' checkbox for tasks
 
 # Notes
 
@@ -31,7 +34,10 @@ I factored out the list itself to a model object; it inherits directly from `SQL
 ![Remove task Walkthrough](images/RemoveTask.gif)
 
 # Edit task walkthrough
-![Remove task Walkthrough](images/EditTask.gif)
+![Edit task Walkthrough](images/EditTask.gif)
 
 # Persistence walkthrough
-![Remove task Walkthrough](images/Persistence.gif)
+![Persistence Walkthrough](images/Persistence.gif)
+
+# Toggle done walkthrough
+![Toggle done Walkthrough](images/ToggleDone.gif)
