@@ -18,7 +18,7 @@ import com.thomasharte.todo.R;
 import java.util.Date;
 
 
-class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity {
 
     private TodoItemListAdaptor itemsAdaptor;
     private ListView lvItems;
