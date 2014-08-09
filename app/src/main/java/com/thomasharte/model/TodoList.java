@@ -30,7 +30,7 @@ public class TodoList extends SQLiteOpenHelper {
 	private static final String DESCRIPTION_COLUMN = "description";
 	private static final String DATE_COLUMN = "date";
 	private static final String DONE_COLUMN = "done";
-	private static final String ID_COLUMN = "ROWID";    // this is the one SQLite provides for us
+	private static final String ID_COLUMN = "ROWID";	// this is the one SQLite provides for us
 
 	private static final int databaseVersion = 5;
 
@@ -43,7 +43,7 @@ public class TodoList extends SQLiteOpenHelper {
 
 	// a fairly vanilla constructor; it calls the appropriate super
 	// constructor and does the initial restore of items
-    private TodoList(Context applicationContext) {
+	private TodoList(Context applicationContext) {
 		super(applicationContext, "todoList", null, databaseVersion);
 		readItems();
 	}
@@ -83,8 +83,9 @@ public class TodoList extends SQLiteOpenHelper {
 		Cursor cursor = getReadableDatabase().query(TABLE_NAME, columns, null, null, null, null, ID_COLUMN, null);
 
 		cursor.moveToFirst();
+		Date insertionDate = new Date(0);
 		while(!cursor.isAfterLast()) {
-			items.add(new TodoItem(cursor.getInt(0), cursor.getString(1), new Date(cursor.getLong(2)), cursor.getInt(3) > 0));
+			items.add(new TodoItem(cursor.getInt(0), cursor.getString(1), new Date(cursor.getLong(2)), cursor.getInt(3) > 0, insertionDate));
 			cursor.moveToNext();
 		}
 	}
@@ -100,8 +101,8 @@ public class TodoList extends SQLiteOpenHelper {
 	}
 
 	private String whereClauseForItem(TodoItem item) {
-        return ID_COLUMN + " = " + item.getRowID();
-    }
+		return ID_COLUMN + " = " + item.getRowID();
+	}
 
 	// the following act a lot like a standard Array, but
 	// parrot material to the SQL store upon any update
@@ -114,11 +115,11 @@ public class TodoList extends SQLiteOpenHelper {
 		return items.size();
 	}
 
-    public void addItem(TodoItem item) {
+	public void addItem(TodoItem item) {
 		// add the thing, then create the recorded TodoItem according to
 		// the row ID we obtain with the insert
 		long rowID = getWritableDatabase().insert(TABLE_NAME, null, contentValuesForItem(item));
-		items.add(new TodoItem(rowID, item.getDescription(), item.getDate(), item.getIsDone()));
+		items.add(new TodoItem(rowID, item.getDescription(), item.getDate(), item.getIsDone(), item.getInsertionDate()));
 	}
 
 	public void removeItem(int index) {
@@ -136,7 +137,7 @@ public class TodoList extends SQLiteOpenHelper {
 		// item into the array (as the row ID will be assumed to be correct
 		// in the future)
 		TodoItem existingItem = items.get(index);
-		TodoItem modifiedItem = new TodoItem(existingItem.getRowID(), item.getDescription(), item.getDate(), item.getIsDone());
+		TodoItem modifiedItem = new TodoItem(existingItem.getRowID(), item.getDescription(), item.getDate(), item.getIsDone(), existingItem.getInsertionDate());
 
 		getWritableDatabase().update(TABLE_NAME, contentValuesForItem(modifiedItem), whereClauseForItem(modifiedItem), null);
 		items.set(index, modifiedItem);

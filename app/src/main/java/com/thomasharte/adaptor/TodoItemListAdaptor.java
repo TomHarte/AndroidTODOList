@@ -1,9 +1,12 @@
 package com.thomasharte.adaptor;
 
 import android.content.Context;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -16,24 +19,21 @@ import com.thomasharte.todo.R;
 import java.text.DateFormat;
 import java.util.Date;
 
-/**
- * Created by thomasharte on 16/07/2014.
- */
 public class TodoItemListAdaptor extends BaseAdapter {
 
-    private final TodoList todoList;
-    private final Context context;
+	private final TodoList todoList;
+	private final Context context;
+	private final DisplayMetrics displayMetrics;
 
-    public TodoItemListAdaptor (Context context, TodoList todoList) {
-        super();
-        this.todoList = todoList;
-        this.context = context;
-    }
+	public TodoItemListAdaptor (Context context, TodoList todoList, DisplayMetrics displayMetrics) {
+		super();
+		this.todoList = todoList;
+		this.context = context;
+		this.displayMetrics = displayMetrics;
+	}
 
-    // Translates a particular `BoxOfficeMovie` given a position
-    // into a relevant row within an AdapterView
-    @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+	@Override
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		// Get the data item for this position
 		final TodoItem item = todoList.getItem(position);
 
@@ -44,8 +44,8 @@ public class TodoItemListAdaptor extends BaseAdapter {
 		}
 
 		// Lookup views within item layout
-        TextView descriptionView = (TextView) convertView.findViewById(R.id.description);
-        TextView dateView = (TextView) convertView.findViewById(R.id.date);
+		TextView descriptionView = (TextView) convertView.findViewById(R.id.description);
+		TextView dateView = (TextView) convertView.findViewById(R.id.date);
 		CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.checkBox);
 
 		// add a listener to the checkbox, binding in the latest TodoItem
@@ -69,22 +69,26 @@ public class TodoItemListAdaptor extends BaseAdapter {
 		dateView.setText(DateFormat.getDateInstance().format(date) + ", " + DateFormat.getTimeInstance(DateFormat.SHORT).format(date));
 		checkBox.setChecked(item.getIsDone());
 
+		// add an animation if we've not seen this row before
+		Long rowID = item.getRowID();
+		long timeDifference = (new Date()).getTime() - item.getInsertionDate().getTime();
+		if(timeDifference < 250) {
+			Animation animation = new TranslateAnimation(displayMetrics.widthPixels, 0, 0, 0);
+			animation.setDuration(250);
+			convertView.setAnimation(animation);
+		}
+
 		// Return the completed view to render on screen
 		return convertView;
 	}
 
-    public int getCount()
-    {
-        return todoList.getCount();
-    }
-
-    public Object getItem(int position)
-    {
-        return position;
-    }
-
-    public long getItemId(int position)
-    {
-        return position;
-    }
+	public int getCount() {
+		return todoList.getCount();
+	}
+	public Object getItem(int position) {
+		return position;
+	}
+	public long getItemId(int position) {
+		return position;
+	}
 }
