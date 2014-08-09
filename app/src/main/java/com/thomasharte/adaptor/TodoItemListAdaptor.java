@@ -1,24 +1,19 @@
 package com.thomasharte.adaptor;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.thomasharte.model.TodoItem;
 import com.thomasharte.model.TodoList;
 import com.thomasharte.todo.R;
-import com.thomasharte.view.EditItemActivity;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -26,8 +21,8 @@ import java.util.Date;
  */
 public class TodoItemListAdaptor extends BaseAdapter {
 
-    private TodoList todoList;
-    private Context context;
+    private final TodoList todoList;
+    private final Context context;
 
     public TodoItemListAdaptor (Context context, TodoList todoList) {
         super();
@@ -56,8 +51,6 @@ public class TodoItemListAdaptor extends BaseAdapter {
 		// add a listener to the checkbox, binding in the latest TodoItem
 		CompoundButton.OnCheckedChangeListener checkChangedListener =
 				new CompoundButton.OnCheckedChangeListener () {
-					private TodoItem todoItem;
-
 					@Override
 					public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
 						// check that this is an actual change and not a spurious one resulting from

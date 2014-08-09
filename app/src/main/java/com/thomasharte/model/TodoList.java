@@ -43,7 +43,7 @@ public class TodoList extends SQLiteOpenHelper {
 
 	// a fairly vanilla constructor; it calls the appropriate super
 	// constructor and does the initial restore of items
-	public TodoList(Context applicationContext) {
+    private TodoList(Context applicationContext) {
 		super(applicationContext, "todoList", null, databaseVersion);
 		readItems();
 	}
@@ -84,7 +84,7 @@ public class TodoList extends SQLiteOpenHelper {
 
 		cursor.moveToFirst();
 		while(!cursor.isAfterLast()) {
-			items.add(new TodoItem(cursor.getInt(0), cursor.getString(1), new Date(cursor.getLong(2)), cursor.getInt(3) > 0 ? true : false));
+			items.add(new TodoItem(cursor.getInt(0), cursor.getString(1), new Date(cursor.getLong(2)), cursor.getInt(3) > 0));
 			cursor.moveToNext();
 		}
 	}

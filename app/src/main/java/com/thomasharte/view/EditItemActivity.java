@@ -3,10 +3,6 @@ package com.thomasharte.view;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -18,7 +14,7 @@ import com.thomasharte.todo.R;
 import java.util.Calendar;
 import java.util.Date;
 
-public class EditItemActivity extends ActionBarActivity {
+class EditItemActivity extends ActionBarActivity {
 
     // there'll be only one thing to communicate upward - the final content
     // of an item
@@ -69,10 +65,10 @@ public class EditItemActivity extends ActionBarActivity {
     // the item (in effect there's no 'cancel' option in this app)
     @Override
     public void onBackPressed() {
-        saveTodoItem(null);
+        saveTodoItem();
     }
 
-    public void saveTodoItem(View v) {
+    void saveTodoItem() {
         // grab the description
         EditText etItem = (EditText)findViewById(R.id.etItem);
         String description = etItem.getText().toString();

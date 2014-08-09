@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -20,11 +18,11 @@ import com.thomasharte.todo.R;
 import java.util.Date;
 
 
-public class MainActivity extends ActionBarActivity {
+class MainActivity extends ActionBarActivity {
 
-    TodoItemListAdaptor itemsAdaptor;
-    ListView lvItems;
-    TodoList todoList;  // see notes below about factored out model; probably it wasn't
+    private TodoItemListAdaptor itemsAdaptor;
+    private ListView lvItems;
+    private TodoList todoList;  // see notes below about factored out model; probably it wasn't
                         // the ideal thing to do
 
     // there'll be only one thing to communicate onward - the content
@@ -84,7 +82,7 @@ public class MainActivity extends ActionBarActivity {
         lvItems.setOnItemClickListener(clickListener);
     }
 
-    public void AddTotoItem(View v) {
+    public void addTodoItem(View v) {
         // pretty much directly from the tutorial, but for my factoring out
         // of the model
         EditText etNewItem = (EditText)findViewById(R.id.etNewItem);

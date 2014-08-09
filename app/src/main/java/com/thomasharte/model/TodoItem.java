@@ -9,11 +9,11 @@ import java.util.Date;
 public class TodoItem implements Serializable {
     private static final long serialVersionUID = -927491755829361937L;
 
-    private Date date;
-    private String description;
-    private long rowID;
+    private final Date date;
+    private final String description;
+    private final long rowID;
 
-	private Boolean isDone;
+	private final Boolean isDone;
 
     // the full constructor stores the row ID; so this creates
     // the sort of items we expect to hang around
