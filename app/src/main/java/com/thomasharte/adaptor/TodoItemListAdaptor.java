@@ -70,7 +70,6 @@ public class TodoItemListAdaptor extends BaseAdapter {
 		checkBox.setChecked(item.getIsDone());
 
 		// add an animation if we've not seen this row before
-		Long rowID = item.getRowID();
 		long timeDifference = (new Date()).getTime() - item.getInsertionDate().getTime();
 		if(timeDifference < 250) {
 			Animation animation = new TranslateAnimation(displayMetrics.widthPixels, 0, 0, 0);
