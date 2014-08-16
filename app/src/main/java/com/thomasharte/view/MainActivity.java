@@ -99,13 +99,16 @@ public class MainActivity extends ActionBarActivity {
 
 		// pretty much directly from the tutorial, but for my factoring out
 		// of the model
-		todoList.addItem(new TodoItem(itemName, new Date(), false));
+		int insertionPoint = todoList.addItem(new TodoItem(itemName, new Date(), false));
 		itemsAdaptor.notifyDataSetChanged();
 		etNewItem.setText("");
 
+		// scroll to the new insertion point
+		lvItems.smoothScrollToPosition(insertionPoint);
+
 		// hide the keyboard
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(etNewItem.getWindowToken(), 0);
+		InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		inputMethodManager.hideSoftInputFromWindow(etNewItem.getWindowToken(), 0);
 	}
 
 	@Override

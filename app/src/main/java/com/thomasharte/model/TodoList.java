@@ -115,11 +115,12 @@ public class TodoList extends SQLiteOpenHelper {
 		return items.size();
 	}
 
-	public void addItem(TodoItem item) {
+	public int addItem(TodoItem item) {
 		// add the thing, then create the recorded TodoItem according to
 		// the row ID we obtain with the insert
 		long rowID = getWritableDatabase().insert(TABLE_NAME, null, contentValuesForItem(item));
 		items.add(new TodoItem(rowID, item.getDescription(), item.getDate(), item.getIsDone(), item.getInsertionDate()));
+		return items.size();
 	}
 
 	public void removeItem(int index) {
